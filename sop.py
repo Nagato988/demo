@@ -52,7 +52,7 @@ def main():
     for attempt in range(1, MAX_RETRIES + 1):
         print(f"\n[sop] Attempt {attempt}/{MAX_RETRIES} → sending to Codex...")
         call_bridge(prompt)
-        time.sleep(3)  # allow Codex to flush file writes before validation
+        time.sleep(8)  # allow Codex to flush file writes before validation
 
         passed, last_error = run_validation(file_path, validate_cmd)
 
