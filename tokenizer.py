@@ -59,7 +59,11 @@ def tokenize(text: str):
             start = i
             while i < n and (text[i].isalnum() or text[i] == '_'):
                 i += 1
-            tokens.append(("IDENT", text[start:i]))
+            token_value = text[start:i]
+            if tokens and tokens[-1] == ("OP", "="):
+                tokens.append(("STRING", token_value))
+            else:
+                tokens.append(("IDENT", token_value))
             continue
 
         raise ValueError(f"Unexpected character at position {i}: {ch!r}")
