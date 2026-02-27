@@ -11,7 +11,7 @@ A demo project for testing Claude Code.
 
 2. Clone this repository:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/Nagato988/demo.git
    cd demo
    ```
 
