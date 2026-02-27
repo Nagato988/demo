@@ -6,7 +6,7 @@
 |---------------------|-------------------|---------------|
 | SWE-bench Verified  | 77.2%             | 74.5%         |
 | Terminal-Bench      | lower             | best-in-class |
-| Debugging/Refactor  | stronger          | weaker        |
+| Debugging/Refactor  | stronger (edge cases) | strong (validated empirically) |
 | Boilerplate/Docs    | weaker            | stronger      |
 | Math reasoning      | strong            | 100% AIME     |
 
@@ -18,6 +18,11 @@ Sources: [LiveBench](https://livebench.ai) · [LM Council](https://lmcouncil.ai/
 
 ### ROUTE TO CODEX (delegate, low cost)
 
+> **Empirical note (SOP v1 testing):** Codex correctly handled recursive descent
+> parsing, SemVer pre-release ordering, closure late binding, and circular reference
+> detection — all on first attempt. Default aggressively to Codex for any implementation
+> task with a testable spec.
+
 | Signal | Examples |
 |--------|----------|
 | Clear spec, single file | "Create X that does Y, validate with Z" |
@@ -25,20 +30,26 @@ Sources: [LiveBench](https://livebench.ai) · [LM Council](https://lmcouncil.ai/
 | Boilerplate generation | CRUD, tests for known functions, configs |
 | Run & verify | execute script, run linter, run tests |
 | Documentation | docstrings, README sections, changelogs |
-| Simple bug with error message | stack trace + file path provided |
+| Bug with error message | stack trace + file path provided |
+| Complex algorithm with test | parser, cache, sorter — if spec + test provided |
 | grep / search task | find usages, list TODOs, count lines |
 
 ### ROUTE TO CLAUDE (keep, higher cost justified)
+
+> **Key insight:** Claude's advantage is NOT implementation difficulty — it is
+> **intent, context, and judgment**. Reserve Claude for decisions that require
+> understanding the user's goal, not just executing a spec.
 
 | Signal | Examples |
 |--------|----------|
 | Ambiguous user intent | vague requirement, no clear spec |
 | Architectural decision | choosing patterns, data models, APIs |
 | Security-sensitive code | auth, crypto, input validation |
-| Complex multi-file refactor | behavior must be preserved across N files |
+| Undocumented project conventions | "follow our existing style" |
 | Reviewing Codex output | correctness, security, edge cases |
 | Repeated Codex failures (≥2) | same task failed twice → escalate |
 | Cross-cutting concerns | performance, observability, error strategy |
+| Competing constraints | perf vs readability vs compatibility tradeoffs |
 
 ### REQUIRES VALIDATION (borderline)
 
