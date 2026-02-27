@@ -10,6 +10,7 @@ import os
 import subprocess
 import sys
 import textwrap
+import time
 
 BRIDGE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bridge.sh")
 MAX_RETRIES = 2
@@ -50,6 +51,7 @@ def main():
     for attempt in range(1, MAX_RETRIES + 1):
         print(f"\n[sop] Attempt {attempt}/{MAX_RETRIES} → sending to Codex...")
         call_bridge(prompt)
+        time.sleep(3)  # allow Codex to flush file writes before validation
 
         passed, last_error = run_validation(file_path, validate_cmd)
 
