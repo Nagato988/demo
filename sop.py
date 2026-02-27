@@ -7,6 +7,7 @@ Usage:
 import argparse
 import datetime
 import os
+import re
 import subprocess
 import sys
 import textwrap
@@ -76,9 +77,10 @@ def main():
 
 CLAUDE_KEYWORDS = [
     "auth", "authentication", "authoriz", "permission",
-    "secret", "password", "token", "crypto", "encrypt",
+    "secret", "password", "jwt", "oauth", "aes", "rsa", "hmac",
+    "bcrypt", "scrypt", "argon", "ssl", "tls", "certificate",
     "architect", "design pattern", "data model", "api design",
-    "trade-off", "tradeoff", "security", "vulnerability",
+    "trade-off", "tradeoff", "vulnerability", "injection",
     "review", "improve readability", "clean up",
 ]
 
@@ -97,11 +99,17 @@ CODEX_SIGNALS = [
 ]
 
 
+def _word_match(keyword: str, text: str) -> bool:
+    """Match keyword as whole word (or phrase) in text."""
+    pattern = r'\b' + re.escape(keyword) + r'\b'
+    return bool(re.search(pattern, text))
+
+
 def classify_task(task: str) -> tuple[str, str]:
     t = task.lower()
 
     for kw in CLAUDE_KEYWORDS:
-        if kw in t:
+        if _word_match(kw, t):
             return "CLAUDE", f"security/architecture keyword: '{kw}'"
 
     for p in VAGUE_PATTERNS:
